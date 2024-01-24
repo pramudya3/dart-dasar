@@ -17,16 +17,17 @@ void main() {
   }
 
   bool validInput = true;
-  double angka1 = 0;
-  double angka2 = 0;
-  double hasil = 0;
+  int angka1 = 0;
+  int angka2 = 0;
+  double? hasilDouble = 0;
+  int? hasilInt = 0;
   String operator = '';
 
   do {
     stdout.write('Angka pertama = ');
     var intString1 = stdin.readLineSync()!.trim();
     try {
-      angka1 = double.parse(intString1);
+      angka1 = int.parse(intString1);
       validInput = true;
     } catch (e) {
       print('Angka Pertama harus integer');
@@ -38,7 +39,7 @@ void main() {
     stdout.write('Angka Kedua = ');
     var intString2 = stdin.readLineSync()!.trim();
     try {
-      angka2 = double.parse(intString2);
+      angka2 = int.parse(intString2);
       validInput = true;
     } catch (e) {
       print('Angka Kedua harus integer');
@@ -49,41 +50,46 @@ void main() {
   switch (input.toLowerCase()) {
     case ('1'):
       operator = '+';
-      hasil = operation('1', angka1, angka2);
+      (hasilDouble, hasilInt) = operation('1', angka1, angka2);
     case ('2'):
       operator = '-';
-      hasil = operation('2', angka1, angka2);
+      (hasilDouble, hasilInt) = operation('2', angka1, angka2);
     case ('3'):
       operator = '*';
-      hasil = operation('3', angka1, angka2);
+      (hasilDouble, hasilInt) = operation('3', angka1, angka2);
     case ('4'):
       operator = '/';
-      hasil = operation('4', angka1, angka2);
+      (hasilDouble, hasilInt) = operation('4', angka1, angka2);
     case ('5'):
       operator = '%';
-      hasil = operation('5', angka1, angka2);
+      (hasilDouble, hasilInt) = operation('5', angka1, angka2);
     default:
       print('Operator tidak ditemukan');
       return;
   }
 
-  print('Hasil dari $angka1 $operator $angka2 = $hasil');
+  print('Hasil dari $angka1 $operator $angka2 = ${hasilDouble ?? hasilInt}');
 }
 
-double operation(String operasi, double angka1, double angka2) {
+(double?, int?) operation(String operasi, int angka1, int angka2) {
   switch (operasi) {
     case ('1'):
-      return angka1 + angka2;
+      return (null, angka1 + angka2);
     case ('2'):
-      return angka1 - angka2;
+      return (null, angka1 - angka2);
     case ('3'):
-      return angka1 * angka2;
+      return (null, angka1 * angka2);
     case ('4'):
-      var str = (angka1 / angka2).toStringAsFixed(3);
-      return double.parse(str);
+      double? hasil = 0;
+      try {
+        hasil = double.parse((angka1 / angka2).toStringAsFixed(3));
+      } catch (e) {
+        print('Divided by zero: $e');
+      }
+      return (hasil, null);
     case ('5'):
-      return angka1 % angka2;
+      return (null, angka1 % angka2);
     default:
-      return 0;
+      return (null, null);
   }
 }
